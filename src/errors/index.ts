@@ -1,4 +1,4 @@
-class AppError extends Error {
+export class AppError extends Error {
   statusCode: number
   code: string
   
@@ -8,4 +8,3 @@ class AppError extends Error {
     this.code = code;
   }
 }
-
