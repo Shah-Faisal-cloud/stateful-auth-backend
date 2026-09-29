@@ -7,6 +7,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   NODE_ENV: z.enum(['development', 'production', 'test']),
   MONGO_URI: z.url(),
+  BCRYPT_SALT_ROUNDS: z.number()
 })
 
 const parsed = envSchema.safeParse(process.env)
