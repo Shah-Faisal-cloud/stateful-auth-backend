@@ -18,13 +18,16 @@
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "connect-mongo": "^6.0.0",
     "dotenv": "^18.0.3",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "mongoose": "^9.10.2",
     "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
     "@types/node": "^26.6.2",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
