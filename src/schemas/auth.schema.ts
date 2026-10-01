@@ -2,42 +2,25 @@ import z from "zod";
 
 export const signupSchema = z.object({
   name: z
-    .string({
-      error: (iss) => {
-        if (iss.input === undefined) {
-          return "Name is required";
-        }
-      },
-    })
+    .string()
     .trim()
-    .min(3, { error: "Name must be at least 3 characters" })
-    .max(20, { error: "Name must be at most 20 characters" }),
+    .min(3)
+    .max(20),
 
   email: z
-    .string({
-      error: (iss) => {
-        if (iss.input === undefined) {
-          return "Email is required";
-        }
-      },
-    })
+    .string()
     .trim()
+    .max(254)
     .toLowerCase()
-    .pipe(z.email({ error: "Please enter a valid email address" })),
+    .pipe(z.email()),
 
-  password: z.string({
-    error: (iss) => {
-      if (iss.input === undefined) {
-        return 'Password is required'
-      }
-    }
-  })
+  password: z
+    .string()
     .trim()
-    .min(8, { error: 'Password must be at least 8 characters' })
-    .max(64, { error: 'Password must be at most 64 characters' })
-    .regex(/[a-z]/, { error: "Password must contain a lowercase letter" })
-    .regex(/[0-9]/, { error: "Password must contain a number" }),
+    .min(8)
+    .max(64)
+    .regex(/[a-z]/)
+    .regex(/[0-9]/),
 });
 
-
-export type SignupInput = z.infer<typeof signupSchema>
+export type SignupInput = z.infer<typeof signupSchema>;
