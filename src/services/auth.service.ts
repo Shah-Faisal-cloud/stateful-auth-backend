@@ -1,12 +1,12 @@
-import { ConflictError } from "../errors/index.js"
+import { ConflictError, UnauthorizedError } from "../errors/index.js"
 import User from "../models/user.model.js"
-import { hashPassword } from "./password.service.js"
+import { comparePassword, hashPassword } from "./password.service.js"
 
 export const signupUser = async (name: string, email: string, password: string) => {
   const doesExist = await User.findOne({ email })
 
   if (doesExist) {
-    throw new ConflictError('User Already Exists')
+    throw new ConflictError('Email already in use')
   }
 
   const hashedPassword = await hashPassword(password)
@@ -14,3 +14,19 @@ export const signupUser = async (name: string, email: string, password: string) 
   const user = await User.create({ name, email, password: hashedPassword })
   return user
 } 
+
+export const loginUser = async (email: string, password: string) => {
+  const user = await User.findOne({ email }).select('+password')
+
+  if (!user) {
+    throw new UnauthorizedError('Invalid email or password')
+  }
+
+  const doesPasswordMatch = await comparePassword(password, user.password as string)
+
+  if (!doesPasswordMatch) {
+    throw new UnauthorizedError('Invalid email or password')
+  }
+  
+  return user
+}
