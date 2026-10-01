@@ -1,12 +1,17 @@
 interface SuccessResponse<T> {
   success: true,
-  data: T
+  data: T,
+  message?: string,
 }
 
-function successResponse<T>(data: T): SuccessResponse<T> {
-  return {
+function successResponse<T>(data: T, message?: string): SuccessResponse<T> {
+  return message ? {
     success: true,
+    message,
     data
+  } : {
+      success: true,
+      data
   }
 }
 
