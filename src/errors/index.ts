@@ -22,3 +22,9 @@ export class ConflictError extends AppError {
     super(message, 409, 'ConflictError', 'CONFLICT')
   }
 }
+
+export class UnauthorizedError extends AppError {
+  constructor(message: string) {
+    super(message, 401, 'UnauthorizedError', 'UNAUTHORIZED')
+  }
+}
