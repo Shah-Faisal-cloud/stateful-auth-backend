@@ -1,4 +1,4 @@
-import { ConflictError, UnauthorizedError } from "../errors/index.js"
+import { ConflictError, InvalidCredentialsError } from "../errors/index.js"
 import User from "../models/user.model.js"
 import { comparePassword, hashPassword } from "./password.service.js"
 
@@ -19,14 +19,15 @@ export const loginUser = async (email: string, password: string) => {
   const user = await User.findOne({ email }).select('+password')
 
   if (!user) {
-    throw new UnauthorizedError('Invalid email or password')
+    throw new InvalidCredentialsError('Invalid email or password')
   }
 
   const doesPasswordMatch = await comparePassword(password, user.password as string)
 
   if (!doesPasswordMatch) {
-    throw new UnauthorizedError('Invalid email or password')
+    throw new InvalidCredentialsError('Invalid email or password')
   }
   
   return user
 }
+

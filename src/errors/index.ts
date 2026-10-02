@@ -23,8 +23,14 @@ export class ConflictError extends AppError {
   }
 }
 
-export class UnauthorizedError extends AppError {
+export class InvalidCredentialsError extends AppError {
   constructor(message: string) {
-    super(message, 401, 'UnauthorizedError', 'UNAUTHORIZED')
+    super(message, 401, 'InvalidCredentialsError', 'INVALID_CREDENTIALS')
+  }
+}
+
+export class AuthenticationError extends AppError {
+  constructor(message: string) {
+    super(message, 401, 'AuthenticationError', 'NOT_AUTHENTICATED')
   }
 }
