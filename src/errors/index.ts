@@ -29,8 +29,8 @@ export class InvalidCredentialsError extends AppError {
   }
 }
 
-export class AuthenticationError extends AppError {
+export class NotAuthenticatedError extends AppError {
   constructor(message: string) {
-    super(message, 401, 'AuthenticationError', 'NOT_AUTHENTICATED')
+    super(message, 401, 'NotAuthenticatedError', 'NOT_AUTHENTICATED')
   }
 }
