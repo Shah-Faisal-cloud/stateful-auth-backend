@@ -8,7 +8,7 @@ export const signupHandler: RequestHandler = async (req, res) => {
 
   const createdUser = await signupUser(name, email, password);
 
-  req.session.userId = createdUser._id;
+  req.session.userId = createdUser._id.toString();
   res.status(201).json(
     successResponse(
       "Account created successfully",
@@ -27,12 +27,12 @@ export const loginHandler: RequestHandler = async (req, res) => {
 
   const user = await loginUser(email, password);
 
-  req.session.userId = user._id;
+  req.session.userId = user._id.toString();
   res.status(200).json(
     successResponse(
       "Logged in successfully",
       {
-        id: user._id,
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         isVerified: user.isVerified,
