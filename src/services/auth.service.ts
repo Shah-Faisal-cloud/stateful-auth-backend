@@ -22,7 +22,7 @@ export const loginUser = async (email: string, password: string) => {
     throw new InvalidCredentialsError('Invalid email or password')
   }
 
-  const doesPasswordMatch = await comparePassword(password, user.password as string)
+  const doesPasswordMatch = await comparePassword(password, user.password)
 
   if (!doesPasswordMatch) {
     throw new InvalidCredentialsError('Invalid email or password')

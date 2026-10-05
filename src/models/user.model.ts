@@ -3,20 +3,20 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
     minlength: 3,
     maxlength: 20,
     trim: true
   },
   email: {
     type: String,
-    require: true,
+    required: true,
     unique: true,
     lowercase: true
   },
   password: {
     type: String,
-    require: true,
+    required: true,
     select: false
   },
   isVerified: {
