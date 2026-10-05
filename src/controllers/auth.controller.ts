@@ -8,7 +8,7 @@ export const signupHandler: RequestHandler = async (req, res) => {
 
   const createdUser = await signupUser(name, email, password);
 
-  req.session.userId = createdUser._id.toString();
+  req.session.userId = createdUser._id;
   res.status(201).json(
     successResponse(
       "Account created successfully",
@@ -27,7 +27,7 @@ export const loginHandler: RequestHandler = async (req, res) => {
 
   const user = await loginUser(email, password);
 
-  req.session.userId = user._id.toString();
+  req.session.userId = user._id;
   res.status(200).json(
     successResponse(
       "Logged in successfully",

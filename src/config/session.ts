@@ -12,6 +12,7 @@ const sessionMiddleware = () => {
     store: MongoStore.create({
       client: mongoose.connection.getClient(),
       collectionName: 'sessions',
+      stringify: false,
       autoRemove: 'native',
       ttl: 7 * 24 * 60 * 60,
       touchAfter: 24 * 60 * 60
