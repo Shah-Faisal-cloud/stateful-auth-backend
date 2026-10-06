@@ -2,6 +2,7 @@ import express from 'express'
 import globalErrorHandler from './middleware/error.middleware.js';
 import sessionMiddleware from './config/session.js';
 import authRouter from './routes/auth.route.js';
+import userRouter from './routes/user.route.js';
 
 const createApp = () => {
   const app = express();
@@ -13,6 +14,7 @@ const createApp = () => {
   })
 
   app.use('/api/auth', authRouter)
+  app.use('/user', userRouter)
   
   app.use(globalErrorHandler)
 
