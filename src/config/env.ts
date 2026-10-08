@@ -8,7 +8,12 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']),
   MONGO_URI: z.url(),
   BCRYPT_SALT_ROUNDS: z.coerce.number(),
-  SESSION_SECRET: z.string()
+  SESSION_SECRET: z.string(),
+  OTP_EXPIRY_MS: z.coerce.number(),
+  SMTP_HOST: z.string(),
+  SMTP_PORT: z.coerce.number(),
+  SMTP_USER: z.string(),
+  SMTP_PASS: z.string()
 })
 
 const parsed = envSchema.safeParse(process.env)

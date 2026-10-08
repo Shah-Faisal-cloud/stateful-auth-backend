@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import type { LoginInput, SignupInput } from "../schemas/auth.schema.js";
-import { loginUser, signupUser } from "../services/auth.service.js";
+import type { EmailInput, LoginInput, SignupInput } from "../schemas/auth.schema.js";
+import { forgotPassword, loginUser, signupUser } from "../services/auth.service.js";
 import successResponse from "../utils/successResponse.js";
 
 export const signupHandler: RequestHandler = async (req, res) => {
@@ -50,4 +50,11 @@ export const logoutHandler: RequestHandler = async (req, res, next) => {
     res.clearCookie('connect.sid')
     res.status(200).json(successResponse('Logged out successfully'))
   })
+}
+
+export const forgotPasswordHandler: RequestHandler = async (req, res) => {
+  const email: EmailInput = req.body.email
+
+  await forgotPassword(email)
+  res.status(200).json(successResponse('If an account with that email exists, a password reset OTP has been sent.'))
 }
