@@ -13,7 +13,8 @@ const envSchema = z.object({
   SMTP_HOST: z.string(),
   SMTP_PORT: z.coerce.number(),
   SMTP_USER: z.string(),
-  SMTP_PASS: z.string()
+  SMTP_PASS: z.string(),
+  RESET_TOKEN_SECRET: z.string()
 })
 
 const parsed = envSchema.safeParse(process.env)

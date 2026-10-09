@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import type { EmailInput, LoginInput, SignupInput } from "../schemas/auth.schema.js";
-import { forgotPassword, loginUser, signupUser } from "../services/auth.service.js";
+import type { EmailInput, LoginInput, OtpInput, SignupInput } from "../schemas/auth.schema.js";
+import { forgotPassword, loginUser, signupUser, verifyResetOtp } from "../services/auth.service.js";
 import successResponse from "../utils/successResponse.js";
 
 export const signupHandler: RequestHandler = async (req, res) => {
@@ -57,4 +57,17 @@ export const forgotPasswordHandler: RequestHandler = async (req, res) => {
 
   await forgotPassword(email)
   res.status(200).json(successResponse('If an account with that email exists, a password reset OTP has been sent.'))
+}
+
+export const verifyResetOtpHandler: RequestHandler = async (req, res) => {
+  const email: EmailInput = req.body.email
+  const otp: OtpInput = req.body.otp
+
+  const token = await verifyResetOtp(email, otp)
+  res.status(200).json(successResponse(
+    'OTP verified successfully. Please enter your new password.',
+    {
+      resetToken: token
+    }
+  ))
 }

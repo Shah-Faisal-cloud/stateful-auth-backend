@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { changePassword, deleteAccount } from "../services/user.service.js";
 import successResponse from "../utils/successResponse.js";
-import type { extendedPasswordInput, PasswordInput } from "../schemas/auth.schema.js";
+import type { ExtendedPasswordInput, PasswordInput } from "../schemas/auth.schema.js";
 import type { Types } from "mongoose";
 
 export const deleteAccountHandler: RequestHandler = async (req, res) => {
@@ -17,7 +17,7 @@ export const deleteAccountHandler: RequestHandler = async (req, res) => {
 export const changePasswordHandler: RequestHandler = async (req, res) => {
   const userId = req.session.userId as Types.ObjectId
   const oldPassword: PasswordInput = req.body.oldPassword
-  const newPassword: extendedPasswordInput = req.body.newPassword
+  const newPassword: ExtendedPasswordInput = req.body.newPassword
 
   await changePassword(userId, oldPassword, newPassword)
 

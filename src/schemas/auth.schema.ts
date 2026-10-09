@@ -17,9 +17,11 @@ export const loginSchema = z.object({
   password: passwordSchema
 })
 
+export const otpSchema = z.string().length(6)
 
 export type EmailInput = z.infer<typeof emailSchema>
 export type PasswordInput = z.infer<typeof passwordSchema>
-export type extendedPasswordInput = z.infer<typeof extendedPasswordSchema>
+export type ExtendedPasswordInput = z.infer<typeof extendedPasswordSchema>
 export type SignupInput = z.infer<typeof signupSchema>
 export type LoginInput = z.infer<typeof loginSchema>
+export type OtpInput = z.infer<typeof otpSchema>
