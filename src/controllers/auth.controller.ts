@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import type { EmailInput, LoginInput, OtpInput, SignupInput } from "../schemas/auth.schema.js";
-import { forgotPassword, loginUser, signupUser, verifyResetOtp } from "../services/auth.service.js";
+import type { EmailInput, ExtendedPasswordInput, LoginInput, OtpInput, SignupInput } from "../schemas/auth.schema.js";
+import { forgotPassword, loginUser, resetPassword, signupUser, verifyResetOtp } from "../services/auth.service.js";
 import successResponse from "../utils/successResponse.js";
 
 export const signupHandler: RequestHandler = async (req, res) => {
@@ -70,4 +70,13 @@ export const verifyResetOtpHandler: RequestHandler = async (req, res) => {
       resetToken: token
     }
   ))
+}
+
+export const resetPasswordHandler: RequestHandler = async (req, res) => {
+  const token: string = req.body.resetToken
+  const password: ExtendedPasswordInput = req.body.newPassword
+
+  await resetPassword(token, password)
+
+  res.status(200).json(successResponse('Password reset successfully. You can now log in with your new password.'))
 }

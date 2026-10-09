@@ -1,10 +1,10 @@
 import env from "../config/env.js"
-import { BadRequestError, ConflictError, InvalidCredentialsError } from "../errors/index.js"
+import { BadRequestError, ConflictError, InvalidCredentialsError, NotFoundError } from "../errors/index.js"
 import User from "../models/user.model.js"
 import generateOtp from "../utils/otp.js"
 import { sendPasswordResetOtp } from "./email.service.js"
 import { comparePassword, hashPassword } from "./password.service.js"
-import { signResetToken } from "./token.service.js"
+import { signResetToken, verifyResetToken } from "./token.service.js"
 
 export const signupUser = async (name: string, email: string, password: string) => {
   const doesExist = await User.findOne({ email })
@@ -77,3 +77,24 @@ export const verifyResetOtp = async (email: string, otp: string) => {
   return token
 }
 
+export const resetPassword = async (token: string, newPassword: string) => {
+  let payload
+  
+  try {
+    payload = verifyResetToken(token) as { sub: string }
+  } catch {
+    throw new BadRequestError('Invalid or expired reset token')
+  }
+
+  const userId = payload.sub
+  
+  const user = await User.findById(userId)
+  if (!user) {
+    throw new NotFoundError('User not found')
+  }
+
+  const newPasswordHash = await hashPassword(newPassword)
+  
+  user.password = newPasswordHash
+  await user.save()
+}

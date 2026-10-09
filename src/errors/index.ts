@@ -34,3 +34,9 @@ export class NotAuthenticatedError extends AppError {
     super(message, 401, 'NotAuthenticatedError', 'NOT_AUTHENTICATED')
   }
 }
+
+export class NotFoundError extends AppError {
+  constructor(message: string) {
+    super(message, 404, 'NotFoundError', 'NOT_FOUND')
+  }
+}
