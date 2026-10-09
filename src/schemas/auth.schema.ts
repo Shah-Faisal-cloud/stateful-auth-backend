@@ -1,10 +1,6 @@
 import z from "zod";
+import { emailSchema, extendedPasswordSchema, otpSchema, passwordSchema } from "./shared.schema.js";
 
-export const emailSchema = z.string().trim().max(254).toLowerCase().pipe(z.email())
-
-export const passwordSchema = z.string().min(1).max(64)
-
-export const extendedPasswordSchema = passwordSchema.min(8).regex(/[a-z]/).regex(/[0-9]/)
 
 export const signupSchema = z.object({
   name: z.string().trim().min(3).max(20),
@@ -17,11 +13,23 @@ export const loginSchema = z.object({
   password: passwordSchema
 })
 
-export const otpSchema = z.string().length(6)
+export const forgotPasswordSchema = z.object({
+  email: emailSchema
+})
 
-export type EmailInput = z.infer<typeof emailSchema>
-export type PasswordInput = z.infer<typeof passwordSchema>
-export type ExtendedPasswordInput = z.infer<typeof extendedPasswordSchema>
+export const verifyResetOtpSchema = z.object({
+  email: emailSchema,
+  otp: otpSchema
+})
+
+export const resetPasswordSchema = z.object({
+  resetToken: z.string(),
+  newPassword: extendedPasswordSchema
+})
+
+
 export type SignupInput = z.infer<typeof signupSchema>
 export type LoginInput = z.infer<typeof loginSchema>
-export type OtpInput = z.infer<typeof otpSchema>
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
+export type VerifyResetOtpInput = z.infer<typeof verifyResetOtpSchema>
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>
