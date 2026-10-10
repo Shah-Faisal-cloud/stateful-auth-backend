@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
-import { changePassword, deleteAccount, requestVerificationOtp, VerifyEmail } from "../services/user.service.js";
+import { changePassword, deleteAccount, requestVerificationOtp, updateProfile, VerifyEmail } from "../services/user.service.js";
 import successResponse from "../utils/successResponse.js";
 import type { Types } from "mongoose";
-import type { ChangePasswordInput, DeleteAccountInput, VerifyEmailInput } from "../schemas/user.schema.js";
+import type { ChangePasswordInput, DeleteAccountInput, UpdateProfileInput, VerifyEmailInput } from "../schemas/user.schema.js";
 import User from "../models/user.model.js";
 
 export const deleteAccountHandler: RequestHandler<{}, {}, DeleteAccountInput> = async (req, res) => {
@@ -51,7 +51,7 @@ export const getMeHandler: RequestHandler = async (req, res) => {
     undefined,
     {
       id: user!._id.toString(),
-      name: user!._id,
+      name: user!.name,
       email: user!.email,
       isVerified: user!.isVerified
     }
