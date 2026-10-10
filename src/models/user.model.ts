@@ -23,6 +23,14 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  verificationOtp: {
+    type: String,
+    default: null
+  },
+  verificationOtpExpiresAt: {
+    type: Date,
+    default: null
+  },
   passwordResetOtp: {
     type: String,
     default: null

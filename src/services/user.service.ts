@@ -2,6 +2,9 @@ import User from "../models/user.model.js"
 import { BadRequestError, InvalidCredentialsError } from "../errors/index.js"
 import { comparePassword, hashPassword } from "./password.service.js"
 import mongoose, { Types } from "mongoose"
+import generateOtp from "../utils/otp.js"
+import env from "../config/env.js"
+import { sendVerificationOtpEmail } from "./email.service.js"
 
 export const deleteAccount = async (userId: Types.ObjectId, password: string) => {
 
@@ -32,4 +35,21 @@ export const changePassword = async (userId: Types.ObjectId, oldPassword: string
   const newPasswordHash = await hashPassword(newPassword)
   user!.password = newPasswordHash
   await user!.save()
+}
+
+export const requestVerificationOtp = async (userId: Types.ObjectId) => {
+  const user = await User.findById(userId)
+
+  if (user!.isVerified) {
+    throw new BadRequestError('Email is already verified')
+  }
+
+  const otp = generateOtp()
+  const otpExpiresAt = new Date(Date.now() + env.OTP_EXPIRY_MS)
+
+  user!.verificationOtp = otp
+  user!.verificationOtpExpiresAt = otpExpiresAt
+  await user!.save()
+
+  await sendVerificationOtpEmail(user!.email, user!.name, otp)
 }

@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { changePassword, deleteAccount } from "../services/user.service.js";
+import { changePassword, deleteAccount, requestVerificationOtp } from "../services/user.service.js";
 import successResponse from "../utils/successResponse.js";
 import type { Types } from "mongoose";
 import type { ChangePasswordInput, DeleteAccountInput } from "../schemas/user.schema.js";
@@ -23,3 +23,12 @@ export const changePasswordHandler: RequestHandler<{}, {}, ChangePasswordInput> 
 
   res.status(200).json(successResponse('Password changed successfully'))
 }
+
+export const requestVerificationOtpHandler: RequestHandler = async (req, res) => {
+  const userId = req.session.userId as Types.ObjectId
+
+  await requestVerificationOtp(userId)
+
+  res.status(200).json(successResponse('OTP sent to your email'))
+}
+
