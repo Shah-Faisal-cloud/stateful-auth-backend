@@ -5,6 +5,7 @@ import mongoose, { Types } from "mongoose"
 import generateOtp from "../utils/otp.js"
 import env from "../config/env.js"
 import { sendVerificationOtpEmail } from "./email.service.js"
+import type { UpdateProfileInput } from "../schemas/user.schema.js"
 
 export const deleteAccount = async (userId: Types.ObjectId, password: string) => {
 
@@ -71,4 +72,9 @@ export const VerifyEmail = async (userId: Types.ObjectId, otp: string) => {
   user!.verificationOtp = null
   user!.verificationOtpExpiresAt = null
   await user!.save()
+}
+
+export const updateProfile = async (userId: Types.ObjectId, updates: UpdateProfileInput) => {
+  const user = await User.findByIdAndUpdate(userId, updates, { returnDocument: 'after', runValidators: true })
+  return user
 }

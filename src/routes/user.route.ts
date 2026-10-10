@@ -1,8 +1,8 @@
 import { Router } from "express";
 import authenticate from "../middleware/auth.middleware.js";
 import validateBody from "../middleware/validate.middleware.js";
-import { changePasswordHandler, deleteAccountHandler, getMeHandler, requestVerificationOtpHandler, verifyEmailHandler } from "../controllers/user.controller.js";
-import { changePasswordSchema, deleteAccountSchema, verifyEmailSchema } from "../schemas/user.schema.js";
+import { changePasswordHandler, deleteAccountHandler, getMeHandler, requestVerificationOtpHandler, updateProfileHandler, verifyEmailHandler } from "../controllers/user.controller.js";
+import { changePasswordSchema, deleteAccountSchema, updateProfileSchema, verifyEmailSchema } from "../schemas/user.schema.js";
 
 
 const userRouter = Router()
@@ -12,5 +12,6 @@ userRouter.post('/password', authenticate, validateBody(changePasswordSchema), c
 userRouter.post('/verification-otp', authenticate, requestVerificationOtpHandler)
 userRouter.post('/verify-email', authenticate, validateBody(verifyEmailSchema), verifyEmailHandler)
 userRouter.get('/me', authenticate, getMeHandler)
+userRouter.patch('/me', authenticate, validateBody(updateProfileSchema), updateProfileHandler)
 
 export default userRouter

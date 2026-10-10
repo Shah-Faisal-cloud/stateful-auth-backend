@@ -57,3 +57,19 @@ export const getMeHandler: RequestHandler = async (req, res) => {
     }
   ))
 }
+
+export const updateProfileHandler: RequestHandler<{}, {}, UpdateProfileInput> = async (req, res) => {
+  const userId = req.session.userId as Types.ObjectId
+
+  const updatedUser = await updateProfile(userId, req.body)
+
+  res.status(200).json(successResponse(
+    'Profile updated successfully',
+    {
+      id: updatedUser!._id,
+      name: updatedUser!.name,
+      email: updatedUser!.email,
+      isVerified: updatedUser!.isVerified
+    }
+  ))
+}
