@@ -59,7 +59,7 @@ export const verifyResetOtp = async (email: string, otp: string) => {
   }
 
   const doesOtpMatch = otp === user.passwordResetOtp
-  if (!doesOtpMatch) {
+  if (!doesOtpMatch || user.passwordResetOtpExpiresAt === null) {
     throw new BadRequestError('Invalid or expired OTP')
   }
 
