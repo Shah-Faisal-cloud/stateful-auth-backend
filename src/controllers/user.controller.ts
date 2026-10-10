@@ -3,6 +3,7 @@ import { changePassword, deleteAccount, requestVerificationOtp, VerifyEmail } fr
 import successResponse from "../utils/successResponse.js";
 import type { Types } from "mongoose";
 import type { ChangePasswordInput, DeleteAccountInput, VerifyEmailInput } from "../schemas/user.schema.js";
+import User from "../models/user.model.js";
 
 export const deleteAccountHandler: RequestHandler<{}, {}, DeleteAccountInput> = async (req, res) => {
   const password = req.body.password
@@ -39,4 +40,20 @@ export const verifyEmailHandler: RequestHandler<{}, {}, VerifyEmailInput> = asyn
   await VerifyEmail(userId, otp)
 
   res.status(200).json(successResponse('Email verified successfully'))
+}
+
+export const getMeHandler: RequestHandler = async (req, res) => {
+  const userId = req.session.userId as Types.ObjectId
+
+  const user = await User.findById(userId)
+
+  res.status(200).json(successResponse(
+    undefined,
+    {
+      id: user!._id.toString(),
+      name: user!._id,
+      email: user!.email,
+      isVerified: user!.isVerified
+    }
+  ))
 }
