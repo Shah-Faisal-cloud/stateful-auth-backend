@@ -1,9 +1,9 @@
 import z from "zod";
-import { emailSchema, extendedPasswordSchema, otpSchema, passwordSchema } from "./shared.schema.js";
+import { emailSchema, extendedPasswordSchema, nameSchema, otpSchema, passwordSchema } from "./shared.schema.js";
 
 
 export const signupSchema = z.object({
-  name: z.string().trim().min(3).max(20),
+  name: nameSchema,
   email: emailSchema,
   password: extendedPasswordSchema
 });
