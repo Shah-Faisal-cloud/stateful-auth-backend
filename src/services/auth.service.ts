@@ -2,7 +2,7 @@ import env from "../config/env.js"
 import { BadRequestError, ConflictError, InvalidCredentialsError, NotFoundError } from "../errors/index.js"
 import User from "../models/user.model.js"
 import generateOtp from "../utils/otp.js"
-import { sendPasswordResetOtp } from "./email.service.js"
+import { sendPasswordResetOtpEmail } from "./email.service.js"
 import { comparePassword, hashPassword } from "./password.service.js"
 import { signResetToken, verifyResetToken } from "./token.service.js"
 
@@ -45,11 +45,11 @@ export const forgotPassword = async (email: string) => {
   const otp = generateOtp()
   const expiresAt = new Date(Date.now() + env.OTP_EXPIRY_MS)
 
-  user.resetOtp = otp
-  user.resetOtpExpiresAt = expiresAt
+  user.passwordResetOtp = otp
+  user.passwordResetOtpExpiresAt = expiresAt
   await user.save()
 
-  await sendPasswordResetOtp(user.email, otp)
+  await sendPasswordResetOtpEmail(user.email, otp)
 }
 
 export const verifyResetOtp = async (email: string, otp: string) => {
@@ -58,20 +58,20 @@ export const verifyResetOtp = async (email: string, otp: string) => {
     throw new BadRequestError('Invalid or expired OTP')
   }
 
-  const doesOtpMatch = otp === user.resetOtp
+  const doesOtpMatch = otp === user.passwordResetOtp
   if (!doesOtpMatch) {
     throw new BadRequestError('Invalid or expired OTP')
   }
 
-  const isOtpExpired = user.resetOtpExpiresAt!.getTime() < Date.now()
+  const isOtpExpired = user.passwordResetOtpExpiresAt!.getTime() < Date.now()
   if (isOtpExpired) {
     throw new BadRequestError('Invalid or expired OTP')
   }
 
   const token = signResetToken(user._id)
 
-  user.resetOtp = null
-  user.resetOtpExpiresAt = null
+  user.passwordResetOtp = null
+  user.passwordResetOtpExpiresAt = null
   await user.save()
 
   return token

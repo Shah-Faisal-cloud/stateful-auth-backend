@@ -23,11 +23,11 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  resetOtp: {
+  passwordResetOtp: {
     type: String,
     default: null
   },
-  resetOtpExpiresAt: {
+  passwordResetOtpExpiresAt: {
     type: Date,
     default: null
   }
