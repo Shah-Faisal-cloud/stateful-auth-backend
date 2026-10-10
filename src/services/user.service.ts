@@ -53,3 +53,22 @@ export const requestVerificationOtp = async (userId: Types.ObjectId) => {
 
   await sendVerificationOtpEmail(user!.email, user!.name, otp)
 }
+
+export const VerifyEmail = async (userId: Types.ObjectId, otp: string) => {
+  const user = await User.findById(userId)
+
+  const doesOtpMatch = user!.verificationOtp === otp
+  if (!doesOtpMatch || user!.verificationOtpExpiresAt === null) {
+    throw new BadRequestError('Invalid or expired OTP')
+  }
+
+  const isOtpExpired = user!.verificationOtpExpiresAt!.getTime() < Date.now()
+  if (isOtpExpired) {
+    throw new BadRequestError('Invalid or expired OTP')
+  }
+
+  user!.isVerified = true
+  user!.verificationOtp = null
+  user!.verificationOtpExpiresAt = null
+  await user!.save()
+}

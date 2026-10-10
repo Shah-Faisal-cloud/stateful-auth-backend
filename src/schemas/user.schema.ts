@@ -1,5 +1,5 @@
 import z from "zod";
-import { extendedPasswordSchema, passwordSchema } from "./shared.schema.js";
+import { extendedPasswordSchema, otpSchema, passwordSchema } from "./shared.schema.js";
 
 
 export const deleteAccountSchema = z.object({
@@ -11,6 +11,11 @@ export const changePasswordSchema = z.object({
   newPassword: extendedPasswordSchema
 })
 
+export const verifyEmailSchema = z.object({
+  otp: otpSchema
+})
+
 
 export type DeleteAccountInput = z.infer<typeof deleteAccountSchema>
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>
+export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>
