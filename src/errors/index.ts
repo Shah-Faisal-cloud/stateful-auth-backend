@@ -40,3 +40,9 @@ export class NotFoundError extends AppError {
     super(message, 404, 'NotFoundError', 'NOT_FOUND')
   }
 }
+
+export class NotVerifiedError extends AppError {
+  constructor(message: string) {
+    super(message, 403, 'NotVerifiedError', 'EMAIL_NOT_VERIFIED')
+  }
+}
