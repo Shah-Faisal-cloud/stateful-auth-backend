@@ -7,7 +7,7 @@ function validateBody(schema: z.ZodType): RequestHandler {
     const parsedBody = schema.safeParse(req.body)
 
     if (!(parsedBody.success)) {
-      return next(new BadRequestError('Invalid Request Data'))
+      throw new BadRequestError('Invalid Request Data')
     }
 
     req.body = parsedBody.data
