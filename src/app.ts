@@ -1,24 +1,24 @@
-import express from 'express'
-import globalErrorHandler from './middleware/error.middleware.js';
+import express from 'express';
 import sessionMiddleware from './config/session.js';
+import globalErrorHandler from './middleware/error.middleware.js';
 import authRouter from './routes/auth.route.js';
 import userRouter from './routes/user.route.js';
 
 const createApp = () => {
-  const app = express();
-  app.use(express.json())
-  app.use(sessionMiddleware())
-  
-  app.get('/', (req, res) => {
-    res.send('Hello, World!')
-  })
+	const app = express();
+	app.use(express.json());
+	app.use(sessionMiddleware());
 
-  app.use('/api/auth', authRouter)
-  app.use('/user', userRouter)
-  
-  app.use(globalErrorHandler)
+	app.get('/', (req, res) => {
+		res.send('Hello, World!');
+	});
 
-  return app
-}
+	app.use('/api/auth', authRouter);
+	app.use('/user', userRouter);
 
-export default createApp
+	app.use(globalErrorHandler);
+
+	return app;
+};
+
+export default createApp;

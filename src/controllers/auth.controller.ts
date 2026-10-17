@@ -1,82 +1,99 @@
-import type { RequestHandler } from "express";
-import type { ForgotPasswordInput, LoginInput, ResetPasswordInput, SignupInput, VerifyResetOtpInput } from "../schemas/auth.schema.js";
-import { forgotPassword, loginUser, resetPassword, signupUser, verifyResetOtp } from "../services/auth.service.js";
-import successResponse, { type SuccessResponse } from "../utils/successResponse.js";
+import type { RequestHandler } from 'express';
+import type {
+	ForgotPasswordInput,
+	LoginInput,
+	ResetPasswordInput,
+	SignupInput,
+	VerifyResetOtpInput,
+} from '../schemas/auth.schema.js';
+import { forgotPassword, loginUser, resetPassword, signupUser, verifyResetOtp } from '../services/auth.service.js';
+import successResponse, { type SuccessResponse } from '../utils/successResponse.js';
 
-export const signupHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, SignupInput> = async (req, res) => {
-  const { name, email, password } = req.body;
+export const signupHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, SignupInput> = async (
+	req,
+	res,
+) => {
+	const { name, email, password } = req.body;
 
-  const createdUser = await signupUser(name, email, password);
+	const createdUser = await signupUser(name, email, password);
 
-  req.session.userId = createdUser._id;
-  res.status(201).json(
-    successResponse(
-      "Account created successfully",
-      {
-        id: createdUser._id.toString(),
-        name: createdUser.name,
-        email: createdUser.email,
-        isVerified: createdUser.isVerified,
-      },
-    ),
-  );
+	req.session.userId = createdUser._id;
+	res.status(201).json(
+		successResponse('Account created successfully', {
+			id: createdUser._id.toString(),
+			name: createdUser.name,
+			email: createdUser.email,
+			isVerified: createdUser.isVerified,
+		}),
+	);
 };
 
-export const loginHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, LoginInput> = async (req, res) => {
-  const { email, password } = req.body;
+export const loginHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, LoginInput> = async (
+	req,
+	res,
+) => {
+	const { email, password } = req.body;
 
-  const user = await loginUser(email, password);
+	const user = await loginUser(email, password);
 
-  req.session.userId = user._id;
-  res.status(200).json(
-    successResponse(
-      "Logged in successfully",
-      {
-        id: user._id.toString(),
-        name: user.name,
-        email: user.email,
-        isVerified: user.isVerified,
-      },
-    ),
-  );
+	req.session.userId = user._id;
+	res.status(200).json(
+		successResponse('Logged in successfully', {
+			id: user._id.toString(),
+			name: user.name,
+			email: user.email,
+			isVerified: user.isVerified,
+		}),
+	);
 };
 
 export const logoutHandler: RequestHandler = async (req, res, next) => {
-  req.session.destroy((err) => {
-    if (err) {
-      next(err)
-    }
+	req.session.destroy((err) => {
+		if (err) {
+			next(err);
+		}
 
-    res.clearCookie('connect.sid')
-    res.status(200).json(successResponse('Logged out successfully'))
-  })
-}
+		res.clearCookie('connect.sid');
+		res.status(200).json(successResponse('Logged out successfully'));
+	});
+};
 
-export const forgotPasswordHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, ForgotPasswordInput> = async (req, res) => {
-  const email = req.body.email
+export const forgotPasswordHandler: RequestHandler<
+	Record<string, never>,
+	SuccessResponse<unknown>,
+	ForgotPasswordInput
+> = async (req, res) => {
+	const email = req.body.email;
 
-  await forgotPassword(email)
-  res.status(200).json(successResponse('If an account with that email exists, a password reset OTP has been sent.'))
-}
+	await forgotPassword(email);
+	res.status(200).json(successResponse('If an account with that email exists, a password reset OTP has been sent.'));
+};
 
-export const verifyResetOtpHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, VerifyResetOtpInput> = async (req, res) => {
-  const email = req.body.email
-  const otp = req.body.otp
+export const verifyResetOtpHandler: RequestHandler<
+	Record<string, never>,
+	SuccessResponse<unknown>,
+	VerifyResetOtpInput
+> = async (req, res) => {
+	const email = req.body.email;
+	const otp = req.body.otp;
 
-  const token = await verifyResetOtp(email, otp)
-  res.status(200).json(successResponse(
-    'OTP verified successfully. Please enter your new password.',
-    {
-      resetToken: token
-    }
-  ))
-}
+	const token = await verifyResetOtp(email, otp);
+	res.status(200).json(
+		successResponse('OTP verified successfully. Please enter your new password.', {
+			resetToken: token,
+		}),
+	);
+};
 
-export const resetPasswordHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, ResetPasswordInput> = async (req, res) => {
-  const token = req.body.resetToken
-  const password = req.body.newPassword
+export const resetPasswordHandler: RequestHandler<
+	Record<string, never>,
+	SuccessResponse<unknown>,
+	ResetPasswordInput
+> = async (req, res) => {
+	const token = req.body.resetToken;
+	const password = req.body.newPassword;
 
-  await resetPassword(token, password)
+	await resetPassword(token, password);
 
-  res.status(200).json(successResponse('Password reset successfully. You can now log in with your new password.'))
-}
+	res.status(200).json(successResponse('Password reset successfully. You can now log in with your new password.'));
+};

@@ -1,7 +1,7 @@
-import { randomInt } from "crypto"
+import { randomInt } from 'node:crypto';
 
 const generateOtp = (): string => {
-  return randomInt(100000, 1000000).toString()
-}
+	return randomInt(100000, 1000000).toString();
+};
 
-export default generateOtp
+export default generateOtp;

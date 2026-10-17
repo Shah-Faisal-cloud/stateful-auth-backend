@@ -1,23 +1,23 @@
 export interface SuccessResponse<T> {
-  success: true,
-  data?: T,
-  message?: string,
+	success: true;
+	data?: T;
+	message?: string;
 }
 
 function successResponse<T>(message?: string, data?: T): SuccessResponse<T> {
-  const response: SuccessResponse<T> = {
-    success: true
-  }
+	const response: SuccessResponse<T> = {
+		success: true,
+	};
 
-  if (data !== undefined) {
-    response.data = data
-  }
+	if (data !== undefined) {
+		response.data = data;
+	}
 
-  if (message !== undefined) {
-    response.message = message
-  }
+	if (message !== undefined) {
+		response.message = message;
+	}
 
-  return response
+	return response;
 }
 
-export default successResponse
+export default successResponse;

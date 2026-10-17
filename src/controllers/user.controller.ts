@@ -1,75 +1,100 @@
-import type { RequestHandler } from "express";
-import { changePassword, deleteAccount, requestVerificationOtp, updateProfile, VerifyEmail } from "../services/user.service.js";
-import successResponse, { type SuccessResponse } from "../utils/successResponse.js";
-import type { Types } from "mongoose";
-import type { ChangePasswordInput, DeleteAccountInput, UpdateProfileInput, VerifyEmailInput } from "../schemas/user.schema.js";
-import User from "../models/user.model.js";
+import type { RequestHandler } from 'express';
+import type { Types } from 'mongoose';
+import User from '../models/user.model.js';
+import type {
+	ChangePasswordInput,
+	DeleteAccountInput,
+	UpdateProfileInput,
+	VerifyEmailInput,
+} from '../schemas/user.schema.js';
+import {
+	changePassword,
+	deleteAccount,
+	requestVerificationOtp,
+	updateProfile,
+	VerifyEmail,
+} from '../services/user.service.js';
+import successResponse, { type SuccessResponse } from '../utils/successResponse.js';
 
-export const deleteAccountHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, DeleteAccountInput> = async (req, res) => {
-  const password = req.body.password
-  const userId = req.session.userId as Types.ObjectId
+export const deleteAccountHandler: RequestHandler<
+	Record<string, never>,
+	SuccessResponse<unknown>,
+	DeleteAccountInput
+> = async (req, res) => {
+	const password = req.body.password;
+	const userId = req.session.userId as Types.ObjectId;
 
-  await deleteAccount(userId, password)
+	await deleteAccount(userId, password);
 
-  res.clearCookie('connect.sid')
-  res.status(200).json(successResponse('Account deleted successfully'))
-}
+	res.clearCookie('connect.sid');
+	res.status(200).json(successResponse('Account deleted successfully'));
+};
 
-export const changePasswordHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, ChangePasswordInput> = async (req, res) => {
-  const userId = req.session.userId as Types.ObjectId
-  const oldPassword = req.body.oldPassword
-  const newPassword = req.body.newPassword
+export const changePasswordHandler: RequestHandler<
+	Record<string, never>,
+	SuccessResponse<unknown>,
+	ChangePasswordInput
+> = async (req, res) => {
+	const userId = req.session.userId as Types.ObjectId;
+	const oldPassword = req.body.oldPassword;
+	const newPassword = req.body.newPassword;
 
-  await changePassword(userId, oldPassword, newPassword)
+	await changePassword(userId, oldPassword, newPassword);
 
-  res.status(200).json(successResponse('Password changed successfully'))
-}
+	res.status(200).json(successResponse('Password changed successfully'));
+};
 
 export const requestVerificationOtpHandler: RequestHandler = async (req, res) => {
-  const userId = req.session.userId as Types.ObjectId
+	const userId = req.session.userId as Types.ObjectId;
 
-  await requestVerificationOtp(userId)
+	await requestVerificationOtp(userId);
 
-  res.status(200).json(successResponse('OTP sent to your email'))
-}
+	res.status(200).json(successResponse('OTP sent to your email'));
+};
 
-export const verifyEmailHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, VerifyEmailInput> = async (req, res) => {
-  const userId = req.session.userId as Types.ObjectId
-  const otp = req.body.otp
+export const verifyEmailHandler: RequestHandler<
+	Record<string, never>,
+	SuccessResponse<unknown>,
+	VerifyEmailInput
+> = async (req, res) => {
+	const userId = req.session.userId as Types.ObjectId;
+	const otp = req.body.otp;
 
-  await VerifyEmail(userId, otp)
+	await VerifyEmail(userId, otp);
 
-  res.status(200).json(successResponse('Email verified successfully'))
-}
+	res.status(200).json(successResponse('Email verified successfully'));
+};
 
 export const getMeHandler: RequestHandler = async (req, res) => {
-  const userId = req.session.userId as Types.ObjectId
+	const userId = req.session.userId as Types.ObjectId;
 
-  const user = await User.findById(userId)
+	const user = await User.findById(userId);
 
-  res.status(200).json(successResponse(
-    undefined,
-    {
-      id: user!._id.toString(),
-      name: user!.name,
-      email: user!.email,
-      isVerified: user!.isVerified
-    }
-  ))
-}
+	res.status(200).json(
+		successResponse(undefined, {
+			id: user!._id.toString(),
+			name: user!.name,
+			email: user!.email,
+			isVerified: user!.isVerified,
+		}),
+	);
+};
 
-export const updateProfileHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, UpdateProfileInput> = async (req, res) => {
-  const userId = req.session.userId as Types.ObjectId
+export const updateProfileHandler: RequestHandler<
+	Record<string, never>,
+	SuccessResponse<unknown>,
+	UpdateProfileInput
+> = async (req, res) => {
+	const userId = req.session.userId as Types.ObjectId;
 
-  const updatedUser = await updateProfile(userId, req.body)
+	const updatedUser = await updateProfile(userId, req.body);
 
-  res.status(200).json(successResponse(
-    'Profile updated successfully',
-    {
-      id: updatedUser!._id,
-      name: updatedUser!.name,
-      email: updatedUser!.email,
-      isVerified: updatedUser!.isVerified
-    }
-  ))
-}
+	res.status(200).json(
+		successResponse('Profile updated successfully', {
+			id: updatedUser!._id,
+			name: updatedUser!.name,
+			email: updatedUser!.email,
+			isVerified: updatedUser!.isVerified,
+		}),
+	);
+};

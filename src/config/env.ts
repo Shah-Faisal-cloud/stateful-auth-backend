@@ -1,32 +1,32 @@
-import dotenv from 'dotenv'
-import z from 'zod'
+import dotenv from 'dotenv';
+import z from 'zod';
 
-dotenv.config()
+dotenv.config();
 
 const envSchema = z.object({
-  PORT: z.coerce.number().default(3000),
-  NODE_ENV: z.enum(['development', 'production', 'test']),
-  MONGO_URI: z.url(),
-  BCRYPT_SALT_ROUNDS: z.coerce.number(),
-  SESSION_SECRET: z.string(),
-  OTP_EXPIRY_MS: z.coerce.number(),
-  SMTP_HOST: z.string(),
-  SMTP_PORT: z.coerce.number(),
-  SMTP_USER: z.string(),
-  SMTP_PASS: z.string(),
-  RESET_TOKEN_SECRET: z.string()
-})
+	PORT: z.coerce.number().default(3000),
+	NODE_ENV: z.enum(['development', 'production', 'test']),
+	MONGO_URI: z.url(),
+	BCRYPT_SALT_ROUNDS: z.coerce.number(),
+	SESSION_SECRET: z.string(),
+	OTP_EXPIRY_MS: z.coerce.number(),
+	SMTP_HOST: z.string(),
+	SMTP_PORT: z.coerce.number(),
+	SMTP_USER: z.string(),
+	SMTP_PASS: z.string(),
+	RESET_TOKEN_SECRET: z.string(),
+});
 
-const parsed = envSchema.safeParse(process.env)
+const parsed = envSchema.safeParse(process.env);
 
-if (!(parsed.success)) {
-  console.error('Invalid environment configuration:')
+if (!parsed.success) {
+	console.error('Invalid environment configuration:');
 
-  const flattened = z.flattenError(parsed.error)
-  console.error(JSON.stringify(flattened.fieldErrors, null, 2))
-  process.exit(1)
+	const flattened = z.flattenError(parsed.error);
+	console.error(JSON.stringify(flattened.fieldErrors, null, 2));
+	process.exit(1);
 }
 
-const env = parsed.data
+const env = parsed.data;
 
-export default env
+export default env;

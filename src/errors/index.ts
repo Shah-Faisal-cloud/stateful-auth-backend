@@ -1,48 +1,47 @@
 export class AppError extends Error {
-  statusCode: number
-  code: string
-  
-  constructor(message: string, statusCode: number, name: string = 'AppError', code: string) {
-    super(message);
-    this.statusCode = statusCode;
-    this.code = code;
-    this.name = name
-  }
+	statusCode: number;
+	code: string;
+
+	constructor(message: string, statusCode: number, name: string = 'AppError', code: string) {
+		super(message);
+		this.statusCode = statusCode;
+		this.code = code;
+		this.name = name;
+	}
 }
 
-
 export class BadRequestError extends AppError {
-  constructor(message: string) {
-    super(message, 400, 'BadRequestError', 'BAD_REQUEST')
-  }
+	constructor(message: string) {
+		super(message, 400, 'BadRequestError', 'BAD_REQUEST');
+	}
 }
 
 export class ConflictError extends AppError {
-  constructor(message: string) {
-    super(message, 409, 'ConflictError', 'CONFLICT')
-  }
+	constructor(message: string) {
+		super(message, 409, 'ConflictError', 'CONFLICT');
+	}
 }
 
 export class InvalidCredentialsError extends AppError {
-  constructor(message: string) {
-    super(message, 401, 'InvalidCredentialsError', 'INVALID_CREDENTIALS')
-  }
+	constructor(message: string) {
+		super(message, 401, 'InvalidCredentialsError', 'INVALID_CREDENTIALS');
+	}
 }
 
 export class NotAuthenticatedError extends AppError {
-  constructor(message: string) {
-    super(message, 401, 'NotAuthenticatedError', 'NOT_AUTHENTICATED')
-  }
+	constructor(message: string) {
+		super(message, 401, 'NotAuthenticatedError', 'NOT_AUTHENTICATED');
+	}
 }
 
 export class NotFoundError extends AppError {
-  constructor(message: string) {
-    super(message, 404, 'NotFoundError', 'NOT_FOUND')
-  }
+	constructor(message: string) {
+		super(message, 404, 'NotFoundError', 'NOT_FOUND');
+	}
 }
 
 export class NotVerifiedError extends AppError {
-  constructor(message: string) {
-    super(message, 403, 'NotVerifiedError', 'EMAIL_NOT_VERIFIED')
-  }
+	constructor(message: string) {
+		super(message, 403, 'NotVerifiedError', 'EMAIL_NOT_VERIFIED');
+	}
 }

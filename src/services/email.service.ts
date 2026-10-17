@@ -1,8 +1,8 @@
-import env from "../config/env.js";
-import transporter from "../config/mailer.js";
+import env from '../config/env.js';
+import transporter from '../config/mailer.js';
 
 const passwordResetTemplate = (otp: string) => {
-  return /* html */ `
+	return /* html */ `
   <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); font-family: Arial, sans-serif;">
       <!-- Header with Yellow Tone -->
       <div style="background-color: #f4b41a; padding: 50px 20px; text-align: center;">
@@ -44,8 +44,8 @@ const passwordResetTemplate = (otp: string) => {
   `;
 };
 
-const emailVerificationTemplate = (otp: string, recepientName: string = "Valued User") => {
-  return /* html */ `
+const emailVerificationTemplate = (otp: string, recepientName: string = 'Valued User') => {
+	return /* html */ `
   <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); font-family: Arial, sans-serif;">
           <!-- Header with Yellow Tone -->
           <div style="background-color: #f4b41a; padding: 50px 20px; text-align: center;">
@@ -85,23 +85,22 @@ const emailVerificationTemplate = (otp: string, recepientName: string = "Valued 
           </div>
       </div>
   `;
-}; 
+};
 
 export const sendPasswordResetOtpEmail = async (to: string, otp: string) => {
-  await transporter.sendMail({
-    from: `Stateful Authentication System <${env.SMTP_USER}>`,
-    to: to,
-    subject: 'Reset Your Password',
-    html: passwordResetTemplate(otp)
-  })
-}
+	await transporter.sendMail({
+		from: `Stateful Authentication System <${env.SMTP_USER}>`,
+		to: to,
+		subject: 'Reset Your Password',
+		html: passwordResetTemplate(otp),
+	});
+};
 
 export const sendVerificationOtpEmail = async (to: string, recepientName: string, otp: string) => {
-  await transporter.sendMail({
-    from: `Stateful Authentication System <${env.SMTP_USER}>`,
-    to: to,
-    subject: 'Verify Your Email',
-    html: emailVerificationTemplate(otp, recepientName)
-  })
-}
- 
+	await transporter.sendMail({
+		from: `Stateful Authentication System <${env.SMTP_USER}>`,
+		to: to,
+		subject: 'Verify Your Email',
+		html: emailVerificationTemplate(otp, recepientName),
+	});
+};
