@@ -1,9 +1,9 @@
 import type { RequestHandler } from "express";
 import type { ForgotPasswordInput, LoginInput, ResetPasswordInput, SignupInput, VerifyResetOtpInput } from "../schemas/auth.schema.js";
 import { forgotPassword, loginUser, resetPassword, signupUser, verifyResetOtp } from "../services/auth.service.js";
-import successResponse from "../utils/successResponse.js";
+import successResponse, { type SuccessResponse } from "../utils/successResponse.js";
 
-export const signupHandler: RequestHandler<{}, {}, SignupInput> = async (req, res) => {
+export const signupHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, SignupInput> = async (req, res) => {
   const { name, email, password } = req.body;
 
   const createdUser = await signupUser(name, email, password);
@@ -22,7 +22,7 @@ export const signupHandler: RequestHandler<{}, {}, SignupInput> = async (req, re
   );
 };
 
-export const loginHandler: RequestHandler<{}, {}, LoginInput> = async (req, res) => {
+export const loginHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, LoginInput> = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await loginUser(email, password);
@@ -52,14 +52,14 @@ export const logoutHandler: RequestHandler = async (req, res, next) => {
   })
 }
 
-export const forgotPasswordHandler: RequestHandler<{}, {}, ForgotPasswordInput> = async (req, res) => {
+export const forgotPasswordHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, ForgotPasswordInput> = async (req, res) => {
   const email = req.body.email
 
   await forgotPassword(email)
   res.status(200).json(successResponse('If an account with that email exists, a password reset OTP has been sent.'))
 }
 
-export const verifyResetOtpHandler: RequestHandler<{}, {}, VerifyResetOtpInput> = async (req, res) => {
+export const verifyResetOtpHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, VerifyResetOtpInput> = async (req, res) => {
   const email = req.body.email
   const otp = req.body.otp
 
@@ -72,7 +72,7 @@ export const verifyResetOtpHandler: RequestHandler<{}, {}, VerifyResetOtpInput> 
   ))
 }
 
-export const resetPasswordHandler: RequestHandler<{}, {}, ResetPasswordInput> = async (req, res) => {
+export const resetPasswordHandler: RequestHandler<Record<string, never>, SuccessResponse<unknown>, ResetPasswordInput> = async (req, res) => {
   const token = req.body.resetToken
   const password = req.body.newPassword
 
