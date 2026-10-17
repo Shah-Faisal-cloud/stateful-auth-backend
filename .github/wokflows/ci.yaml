@@ -1,0 +1,36 @@
+name: Backend Continuous Integration
+
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-codebase:
+    name: Validate and Test
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout Repository Source
+        uses: actions/checkout@v7
+      
+      - name: Initialize Package Manager (pnpm)
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js Runtime (v24)
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install Project Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Execute Typescript Type Check
+        run: pnpm typecheck
+
+      - name: Run Lint and Format Check
+        run: pnpm check:ci
+
+      
