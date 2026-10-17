@@ -1,3 +1,4 @@
+import type { JwtPayload } from "jsonwebtoken"
 import env from "../config/env.js"
 import { BadRequestError, ConflictError, InvalidCredentialsError, NotFoundError } from "../errors/index.js"
 import User from "../models/user.model.js"
@@ -78,23 +79,23 @@ export const verifyResetOtp = async (email: string, otp: string) => {
 }
 
 export const resetPassword = async (token: string, newPassword: string) => {
-  let payload
-  
-  try {
-    payload = verifyResetToken(token) as { sub: string }
-  } catch {
-    throw new BadRequestError('Invalid or expired reset token')
-  }
+	let payload: JwtPayload
 
-  const userId = payload.sub
-  
-  const user = await User.findById(userId)
-  if (!user) {
-    throw new NotFoundError('User not found')
-  }
+	try {
+		payload = verifyResetToken(token)
+	} catch {
+		throw new BadRequestError('Invalid or expired reset token')
+	}
 
-  const newPasswordHash = await hashPassword(newPassword)
-  
-  user.password = newPasswordHash
-  await user.save()
-}
+	const userId = payload.sub as string
+
+	const user = await User.findById(userId)
+	if (!user) {
+		throw new NotFoundError('User not found')
+	}
+
+	const newPasswordHash = await hashPassword(newPassword)
+
+	user.password = newPasswordHash
+	await user.save()
+};

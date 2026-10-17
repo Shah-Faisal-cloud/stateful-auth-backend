@@ -1,5 +1,5 @@
 import type { Types } from "mongoose"
-import jwt from "jsonwebtoken"
+import jwt, { type JwtPayload } from "jsonwebtoken"
 import env from "../config/env.js"
 
 export const signResetToken = (userId: Types.ObjectId) => {
@@ -15,11 +15,12 @@ export const signResetToken = (userId: Types.ObjectId) => {
 }
 
 export const verifyResetToken = (token: string) => {
-  return jwt.verify(
+  const payload = jwt.verify(
     token,
     env.RESET_TOKEN_SECRET,
     {
       algorithms: ["HS256"]
     }
   )
+  return payload as JwtPayload
 }
