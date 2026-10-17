@@ -18,7 +18,10 @@
 		"rules": {
 			"preset": "recommended",
 			"correctness": {
-			  "noUnusedFunctionParameters": "off"
+				"noUnusedFunctionParameters": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
 			}
 		}
 	},
@@ -26,7 +29,7 @@
 		"formatter": {
 			"quoteStyle": "single",
 			"semicolons": "always",
-			"lineWidth": 100
+			"lineWidth": 120
 		}
 	},
 	"assist": {
