@@ -1,11 +1,11 @@
-export interface SuccessResponse<T> {
+export interface SuccessResponse {
 	success: true;
-	data?: T;
+	data?: object;
 	message?: string;
 }
 
-function successResponse<T>(message?: string, data?: T): SuccessResponse<T> {
-	const response: SuccessResponse<T> = {
+function successResponse(message?: string, data?: object): SuccessResponse {
+	const response: SuccessResponse = {
 		success: true,
 	};
 

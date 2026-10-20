@@ -16,11 +16,10 @@ import {
 } from '../services/user.service.js';
 import successResponse, { type SuccessResponse } from '../utils/successResponse.js';
 
-export const deleteAccountHandler: RequestHandler<
-	Record<string, never>,
-	SuccessResponse<unknown>,
-	DeleteAccountInput
-> = async (req, res) => {
+export const deleteAccountHandler: RequestHandler<Record<string, never>, SuccessResponse, DeleteAccountInput> = async (
+	req,
+	res,
+) => {
 	const password = req.body.password;
 	const userId = req.session.userId as Types.ObjectId;
 
@@ -32,7 +31,7 @@ export const deleteAccountHandler: RequestHandler<
 
 export const changePasswordHandler: RequestHandler<
 	Record<string, never>,
-	SuccessResponse<unknown>,
+	SuccessResponse,
 	ChangePasswordInput
 > = async (req, res) => {
 	const userId = req.session.userId as Types.ObjectId;
@@ -52,11 +51,10 @@ export const requestVerificationOtpHandler: RequestHandler = async (req, res) =>
 	res.status(200).json(successResponse('OTP sent to your email'));
 };
 
-export const verifyEmailHandler: RequestHandler<
-	Record<string, never>,
-	SuccessResponse<unknown>,
-	VerifyEmailInput
-> = async (req, res) => {
+export const verifyEmailHandler: RequestHandler<Record<string, never>, SuccessResponse, VerifyEmailInput> = async (
+	req,
+	res,
+) => {
 	const userId = req.session.userId as Types.ObjectId;
 	const otp = req.body.otp;
 
@@ -80,11 +78,10 @@ export const getMeHandler: RequestHandler = async (req, res) => {
 	);
 };
 
-export const updateProfileHandler: RequestHandler<
-	Record<string, never>,
-	SuccessResponse<unknown>,
-	UpdateProfileInput
-> = async (req, res) => {
+export const updateProfileHandler: RequestHandler<Record<string, never>, SuccessResponse, UpdateProfileInput> = async (
+	req,
+	res,
+) => {
 	const userId = req.session.userId as Types.ObjectId;
 
 	const updatedUser = await updateProfile(userId, req.body);
