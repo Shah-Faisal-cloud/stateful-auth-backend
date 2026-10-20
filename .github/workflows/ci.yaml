@@ -33,4 +33,7 @@ jobs:
       - name: Run Lint and Format Check
         run: pnpm check:ci
 
+      - name: Run Automated Test Suite
+        run: pnpm test
+
       
