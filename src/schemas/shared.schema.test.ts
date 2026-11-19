@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { emailSchema, nameSchema, passwordSchema } from './shared.schema.js';
+import { emailSchema, extendedPasswordSchema, nameSchema, passwordSchema } from './shared.schema.js';
 
 describe('nameSchema', () => {
 	test('rejects a name that is less than 3 characters', () => {
@@ -103,6 +103,53 @@ describe('passwordSchema', () => {
 
 	test('rejects a value that is not a string', () => {
 		const result = passwordSchema.safeParse(99);
+		expect(result.success).toBe(false);
+	});
+});
+
+describe('extendedPasswordSchema', () => {
+	test('rejects a password that is less than 15 characters', () => {
+		const result = extendedPasswordSchema.safeParse('a'.repeat(14));
+		expect(result.success).toBe(false);
+	});
+
+	test('accepts a password that is exactly at the minimum threshold (15 characters)', () => {
+		const result = extendedPasswordSchema.safeParse('a'.repeat(15));
+		expect(result.success).toBe(true);
+	});
+
+	test('accepts a password that is exactly at the maximum threshold (64 characters)', () => {
+		const result = extendedPasswordSchema.safeParse('a'.repeat(64));
+		expect(result.success).toBe(true);
+	});
+
+	test('rejects a password with more than 64 characters', () => {
+		const result = extendedPasswordSchema.safeParse('a'.repeat(65));
+		expect(result.success).toBe(false);
+	});
+
+	test('accepts a passphrase with spaces', () => {
+		const result = extendedPasswordSchema.safeParse('correct horse battery staple');
+		expect(result.success).toBe(true);
+	});
+
+	test('accepts a password with no lowercase letters', () => {
+		const result = extendedPasswordSchema.safeParse('1'.repeat(15));
+		expect(result.success).toBe(true);
+	});
+
+	test('accepts characters at the edges of the allowed range (~ and space)', () => {
+		const result = extendedPasswordSchema.safeParse('~' + '$'.repeat(13) + ' ');
+		expect(result.success).toBe(true);
+	});
+
+	test('rejects a non-ASCII character', () => {
+		const result = extendedPasswordSchema.safeParse('a'.repeat(14) + 'é');
+		expect(result.success).toBe(false);
+	});
+
+	test('rejects a control character', () => {
+		const result = extendedPasswordSchema.safeParse('a'.repeat(14) + '\n');
 		expect(result.success).toBe(false);
 	});
 });
