@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { emailSchema, nameSchema } from './shared.schema.js';
+import { emailSchema, nameSchema, passwordSchema } from './shared.schema.js';
 
 describe('nameSchema', () => {
 	test('rejects a name that is less than 3 characters', () => {
@@ -71,6 +71,38 @@ describe('emailSchema', () => {
 
 	test('rejects a value that is not a string', () => {
 		const result = emailSchema.safeParse(99);
+		expect(result.success).toBe(false);
+	});
+});
+
+describe('passwordSchema', () => {
+	test('rejects an empty password', () => {
+		const result = passwordSchema.safeParse('');
+		expect(result.success).toBe(false);
+	});
+
+	test('accepts a password that is exactly at the minimum threshold (1 character)', () => {
+		const result = passwordSchema.safeParse('a');
+		expect(result.success).toBe(true);
+	});
+
+	test('accepts a password that is exactly at the maximum threshold (64 characters)', () => {
+		const result = passwordSchema.safeParse('a'.repeat(64));
+		expect(result.success).toBe(true);
+	});
+
+	test('rejects a password that is more than 64 characters', () => {
+		const result = passwordSchema.safeParse('a'.repeat(65));
+		expect(result.success).toBe(false);
+	});
+
+	test('keeps surrounding whitespace untouched', () => {
+		const result = passwordSchema.safeParse('  pass  ');
+		expect(result.data).toBe('  pass  ');
+	});
+
+	test('rejects a value that is not a string', () => {
+		const result = passwordSchema.safeParse(99);
 		expect(result.success).toBe(false);
 	});
 });
