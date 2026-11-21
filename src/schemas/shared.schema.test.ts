@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { emailSchema, extendedPasswordSchema, nameSchema, passwordSchema } from './shared.schema.js';
+import { emailSchema, extendedPasswordSchema, nameSchema, otpSchema, passwordSchema } from './shared.schema.js';
 
 describe('nameSchema', () => {
 	test('rejects a name that is less than 3 characters', () => {
@@ -150,6 +150,33 @@ describe('extendedPasswordSchema', () => {
 
 	test('rejects a control character', () => {
 		const result = extendedPasswordSchema.safeParse('a'.repeat(14) + '\n');
+		expect(result.success).toBe(false);
+	});
+});
+
+describe('otpSchema', () => {
+	test('rejects an otp that is less than 6 characters', () => {
+		const result = otpSchema.safeParse('1'.repeat(5));
+		expect(result.success).toBe(false);
+	});
+
+	test('accepts an otp that is exactly 6 characters', () => {
+		const result = otpSchema.safeParse('123456');
+		expect(result.success).toBe(true);
+	});
+
+	test('rejects an otp that is more than 6 characters', () => {
+		const result = otpSchema.safeParse('1'.repeat(7));
+		expect(result.success).toBe(false);
+	});
+
+	test('rejects a value that is not a string', () => {
+		const result = otpSchema.safeParse(123456);
+		expect(result.success).toBe(false);
+	});
+
+	test('rejects an otp that contains a non-digit character', () => {
+		const result = otpSchema.safeParse('12345a');
 		expect(result.success).toBe(false);
 	});
 });
