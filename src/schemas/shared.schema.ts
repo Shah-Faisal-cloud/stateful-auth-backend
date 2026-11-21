@@ -8,4 +8,4 @@ export const passwordSchema = z.string().min(1).max(64);
 
 export const extendedPasswordSchema = passwordSchema.min(15).regex(/^[\x20-\x7E]+$/);
 
-export const otpSchema = z.string().length(6);
+export const otpSchema = z.string().regex(/^\d{6}$/);
